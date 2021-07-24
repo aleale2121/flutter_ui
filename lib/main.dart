@@ -3,4 +3,4 @@ import 'burger_tracker/burger_tracker.dart';
 
 void main() {
   runApp(App());
-}
+} 

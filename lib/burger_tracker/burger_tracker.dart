@@ -21,7 +21,34 @@ class BurgerTracker extends StatefulWidget {
   _BurgerTrackerState createState() => _BurgerTrackerState();
 }
 
-class _BurgerTrackerState extends State<BurgerTracker> {
+class _BurgerTrackerState extends State<BurgerTracker>
+    with SingleTickerProviderStateMixin {
+  late AnimationController animController;
+  late Animation carouselAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    animController = AnimationController(
+      duration: Duration(seconds: 7),
+      vsync: this,
+    );
+    carouselAnimation =
+        IntTween(begin: 0, end: photos.length - 1).animate(animController)
+          ..addListener(() {
+            setState(() {
+              photoIndex = carouselAnimation.value;
+            });
+          });
+    animController.repeat();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    animController.dispose();
+  }
+
   int photoIndex = 0;
 
   List<String> photos = [
@@ -74,27 +101,22 @@ class _BurgerTrackerState extends State<BurgerTracker> {
                           color: Colors.pink),
                     ],
                   ),
-                  Positioned(
-                      top: 105,
-                      left: 5.0,
-                      right: 5.0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          IconButton(
-                              onPressed: _previousImage,
-                              icon: Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.amber,
-                              )),
-                          IconButton(
-                              onPressed: _nextImage,
-                              icon: Icon(
-                                Icons.arrow_forward_ios,
-                                color: Colors.amber,
-                              ))
-                        ],
-                      )),
+                  // GestureDetector(
+                  //   child: Container(
+                  //       height: 210,
+                  //       width: MediaQuery.of(context).size.width,
+                  //       color: Colors.transparent,
+                  //   ),
+                  //   onTap: _nextImage,
+                  // ),
+                  // GestureDetector(
+                  //   child: Container(
+                  //     height: 210,
+                  //     width: MediaQuery.of(context).size.width/2,
+                  //     color: Colors.transparent,
+                  //   ),
+                  //   onTap: _previousImage,
+                  // ),
                   Positioned(
                     top: 170.0,
                     left: 5.0,
